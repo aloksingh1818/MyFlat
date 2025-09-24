@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Post Flat - MyFlat{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="fas fa-plus"></i> Post Your Flat or Find Flatmate</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                                <div class="form-text">e.g., "Spacious 2BHK in Central Location"</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="post_type" class="form-label">Post Type</label>
+                                <select class="form-select" id="post_type" name="post_type" required>
+                                    <option value="flat">Flat Available</option>
+                                    <option value="roommate">Looking for Flatmate</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="flat_type" class="form-label">Flat Type</label>
+                                <select class="form-select" id="flat_type" name="flat_type" required>
+                                    <option value="1RK">1RK</option>
+                                    <option value="1BHK">1BHK</option>
+                                    <option value="2BHK">2BHK</option>
+                                    <option value="3BHK">3BHK</option>
+                                    <option value="4BHK">4BHK</option>
+                                    <option value="5BHK">5BHK</option>
+                                    <option value="Studio">Studio</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="rent" class="form-label">Rent (₹/month)</label>
+                                <input type="number" class="form-control" id="rent" name="rent" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                        <div class="form-text">e.g., "Koramangala, Bangalore" or "Sector 18, Noida"</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                        <div class="form-text">Describe the property, amenities, nearby facilities, etc.</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Property Image</label>
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                                <div class="form-text">Upload a photo of the property</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="video" class="form-label">Property Video (Optional)</label>
+                                <input type="file" class="form-control" id="video" name="video" accept="video/*">
+                                <div class="form-text">Upload a video tour (max 50MB)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4 mb-4">
+                        <div class="card-header bg-warning">
+                            <h5 class="mb-0"><i class="fas fa-info-circle"></i> Contact Information</h5>
+                            <small>This information will only be visible to administrators</small>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="contact_name" class="form-label">Contact Name</label>
+                                        <input type="text" class="form-control" id="contact_name" name="contact_name" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="contact_phone" class="form-label">Contact Phone</label>
+                                        <input type="tel" class="form-control" id="contact_phone" name="contact_phone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact_email" class="form-label">Contact Email</label>
+                                <input type="email" class="form-control" id="contact_email" name="contact_email" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <i class="fas fa-check"></i> Post Now
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Search - MyFlat{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="GET">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" name="q" placeholder="Search location, title..." value="{{ query }}">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" name="type">
+                                <option value="">All Types</option>
+                                <option value="1RK" {% if flat_type == '1RK' %}selected{% endif %}>1RK</option>
+                                <option value="1BHK" {% if flat_type == '1BHK' %}selected{% endif %}>1BHK</option>
+                                <option value="2BHK" {% if flat_type == '2BHK' %}selected{% endif %}>2BHK</option>
+                                <option value="3BHK" {% if flat_type == '3BHK' %}selected{% endif %}>3BHK</option>
+                                <option value="4BHK" {% if flat_type == '4BHK' %}selected{% endif %}>4BHK</option>
+                                <option value="5BHK" {% if flat_type == '5BHK' %}selected{% endif %}>5BHK</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" name="post_type">
+                                <option value="">All Posts</option>
+                                <option value="flat" {% if post_type == 'flat' %}selected{% endif %}>Flats Available</option>
+                                <option value="roommate" {% if post_type == 'roommate' %}selected{% endif %}>Looking for Flatmate</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h3>
+            Search Results 
+            {% if query or flat_type or post_type %}
+            <small class="text-muted">({{ flats|length }} found)</small>
+            {% endif %}
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    {% for flat in flats %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            {% if flat.image_path %}
+            <img src="{{ url_for('static', filename=flat.image_path) }}" class="card-img-top" alt="Flat Image" style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="fas fa-home fa-3x text-muted"></i>
+            </div>
+            {% endif %}
+            
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ flat.title }}</h5>
+                <div class="mb-2">
+                    <span class="badge bg-primary">{{ flat.flat_type }}</span>
+                    {% if flat.post_type == 'roommate' %}
+                    <span class="badge bg-success">Looking for Flatmate</span>
+                    {% endif %}
+                </div>
+                <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{ flat.location }}</p>
+                <p class="card-text"><i class="fas fa-rupee-sign"></i> {{ flat.rent }}/month</p>
+                {% if flat.description %}
+                <p class="card-text">{{ flat.description[:100] }}{% if flat.description|length > 100 %}...{% endif %}</p>
+                {% endif %}
+                
+                <div class="mt-auto">
+                    {% if flat.video_path %}
+                    <button class="btn btn-outline-primary btn-sm mb-2" onclick="playVideo('{{ url_for('static', filename=flat.video_path) }}')">
+                        <i class="fas fa-play"></i> Watch Video
+                    </button>
+                    {% endif %}
+                    
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                    <div class="mt-2 p-2 bg-info text-white rounded">
+                        <small>
+                            <strong>Contact:</strong> {{ flat.contact_name }}<br>
+                            <strong>Phone:</strong> {{ flat.contact_phone }}<br>
+                            <strong>Email:</strong> {{ flat.contact_email }}
+                        </small>
+                    </div>
+                    {% else %}
+                    <small class="text-muted">Contact details visible to admin only</small>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <small>Posted {{ flat.created_at.strftime('%B %d, %Y') }}</small>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info text-center">
+            <h4>No results found</h4>
+            <p>Try adjusting your search criteria or browse all available posts.</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">View All Posts</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Video Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Property Video</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <video id="propertyVideo" controls style="width: 100%;">
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function playVideo(videoUrl) {
+    document.getElementById('propertyVideo').src = videoUrl;
+    new bootstrap.Modal(document.getElementById('videoModal')).show();
+}
+
+document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+    document.getElementById('propertyVideo').pause();
+});
+</script>
+{% endblock %}
